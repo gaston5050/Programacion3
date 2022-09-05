@@ -1,0 +1,170 @@
+Programacion III
+
+Sintaxis C#
+Para pedir dato: Console.ReadKey();
+
+Para mostrar por pantalla: Console.WriteLine("Hola mundo");
+
+Variables y tipos de datos:
+int float bool char double decimal long short string datetime
+
+Declaracion tipo de dato: int variable;
+
+Parse(transforma dato)(casteo explicito) ej:
+int a;
+a= int.Parse(Console.ReadLine())
+
+Console.WriteLine("a vale: " + a);
+(se usa + para concatenar)
+
+
+DateTime 
+DateTime fecha= new DateTime();-> carga fecha minima
+
+DateTime fecha= new DateTime(1,4,2000);
+
+DateTime fecha= DateTime.Now;->carga fecha del sistema en ese momento.
+
+DateTime para trabajar con base de datos es conveniente pasar fechas por valor VALORRRRRRR
+
+int a;
+a=int.Parse(txtUno.Text); ->parse cambia el string a int
+
+Excepciones
+Error no esperado en tiempo de ejecucion
+
+ej: 5+j-> error
+
+try -> intentar ejecutar codigo instrucciones dentro de {}
+
+	try{ codigo a ejecutar}catch(Exception ex) { 
+		MessageBox.Show("Hubo un error al ejecutar");
+ }
+
+*catch(Exception ex) { 
+		MessageBox.Show("Hubo un error al ejecutar");
+ }
+
+*no genererico format exception
+	catch(FormatException ex) { 
+		MessageBox.Show("cargar solo numeros");
+ }
+
+Finally y throw
+throw -> accion de lanzar excepcion.
+
+
+Fianlly->bloque opcional, se ejecuta si o si, no importa si entra en el catch o no
+finally{
+	/// ejemplo cierre de coneccion a base de datos
+	
+}
+
+ADO.net
+conexion a base de datos
+*Hay distintos repositorios de coneccion a base de datos.
+Ado namespace 
+*conectado o desconectado
+
+leer y alterar datos -> desconectado: se traen los datos en tabla copia en memoria, luego se envia cambio a base de datos. Dirty read leer informacion
+obsoleta, ya modificada. Se trabaja de modo artesanal, 
+*modelo conectado-> se hace la accion sobre la base de datos.
+
+Creacion de aplicacion en .NET con conexion a base de datos
+En el proyecto crear clase pokemon-> 
+class Pokemon {
+			public int Numero {get;set}
+			public string Nombre {get; set }
+			public string Descripcion {get; set}
+}
+
+Para conectar a base de datos creo una clase:(creo elementos para conectar a base de datos)
+
+Agregar libreria-> using System.Data.SqlClient;
+
+
+	PokemonNegocios{
+			public list<Pokemon> listar (){
+				List <Pokemon> lista = new List <Pokemon>();
+				
+			        SqlConnection conexion = new SqlConnection();
+				SqlCommand comando = new SqlCommand ();
+				SqlDataReader lector;
+
+
+
+				try{
+					
+					conexion.ConnectionString= "server= .\\SQLEXPRESS;database=POKEDEX_DB; integrated security = true";
+					comando.CommandType = System.Data.CommandType.Text;
+					comandndo.CommandText= "SELECT Numero, Nombre, Descripcion From POKEMONS";	
+					comando.Connection = conexion;
+					
+					conexion.Open();
+					lector = comando.ExecuteReader();
+					
+					while(lector.Read()){
+						Pokemon aux = new Pokemon();
+
+					aux.Numero= lector.GetInt32(0)
+					aux.Nombre = (string) lector ["Nombre"];	
+					aux.Descripcion = (string) lector ["Descripcion"];
+
+
+						lista.Add(Aux);
+						}
+						
+
+                                   
+
+					conexion.Close();
+
+					return lista;
+				}
+				
+				catch (Exception ex){	
+						throw ex;
+					}
+
+
+
+				return lista;
+}
+
+
+Visualizar -> Data Grid view ->view code > genero evento load
+ 
+PokemonNegocio negocio = new PokemonNegocio();
+dgvPokemon.dataSourse = negocio.listar();
+
+
+Imagenes en aplicacion
+
+	se agrega la property public string UrlImagen{set;get]
+	agregar pictureBox -> pbxPokemon.Load();
+
+	Pokemon seleccionado = (Pokemon)dbgPokemon.CurrentRow.DataBoundItem;
+	pbxPokemon.Load(seleccionado.UrlImagen);
+
+Leer datos relacionados en DB
+
+
+
+Leer datos de mas de una tabla a la vez
+
+
+Capas de arquitectura
+Modelo de dominio->marca cual es la estructura del objeto
+ya hicimos: modelo, negocio y pantalla
+mvc model view contoler
+*capa modelo de dominio
+*capa pantalla presentacion pantalla
+*capa controler negocio
+	class library (.net Framework)
+enlazar dominio
+hacer public las clases
+
+Centralizar conexion
+
+
+

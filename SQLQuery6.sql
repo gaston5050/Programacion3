@@ -1,0 +1,1 @@
+select nombres from clientes where name "%r"
